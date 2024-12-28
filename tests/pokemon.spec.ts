@@ -49,6 +49,8 @@ test.describe('Pokemon API Tests', () => {
       // Test usando nombre
       const { response: responseByName, responseTime: responseTimeByName } 
         = await pokemonAPI.getPokemonByName(pokemon.name);
+
+      console.log(`Tiempo de respuesta por nombre: ${responseTimeByName}ms`);
       
       expect(responseByName.status()).toBe(200);
       expect(responseTimeByName).toBeLessThan(10000);

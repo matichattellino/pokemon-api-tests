@@ -65,7 +65,11 @@ test.describe('Pokemon Wikipedia Tests', () => {
         
         // Obtener información del artista
         const artworkInfo = await wikiPage.getArtistInfo();
-        console.log(`Artista/Diseñador de ${pokemonName}:`, artworkInfo);
+        // Agregar este formato de log
+        console.log('\nInformación del Artista:');
+        console.log(`- Nombre: ${artworkInfo}`);
+        console.log(`- Encontrado en: ${pokemonName}`);
+        console.log(`- Fecha de consulta: ${new Date().toLocaleString()}`);
         
         console.log(`Test Wikipedia finalizado - ${new Date().toLocaleString()}`);
       } catch (error) {
