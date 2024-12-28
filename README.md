@@ -17,14 +17,14 @@ cd pokemon-api-tests
 2. Instalar dependencias:
 npm install
 
-
 3. Instalar navegadores de Playwright:
 npx playwright install
 
 
 4. Configurar variables de entorno:
 # Crear archivo .env en la raíz del proyecto
-SECRET_KEY=7b5880f7-a781-4b39-9ceb-f8e3bfbce32d
+- Agregar la siguiente variable (reemplazar con tu clave secreta):
+SECRET_KEY=tu_clave_secreta
 
 
 ## Estructura del Proyecto
@@ -50,9 +50,11 @@ pokemon-api-tests/
 
 ## Comandos de Ejecución
 
+## Ejecución de Tests y Reportes
+IMPORTANTE: Seguir estos pasos en orden para ejecutar los tests y generar reportes
+
 ### Ejecutar todas las pruebas
 npm test
-
 
 ### Ejecutar pruebas específicas
 # Solo pruebas de API
@@ -71,8 +73,13 @@ npx playwright test --ui
 # Con navegador visible
 npx playwright test --headed
 
+⚠️ IMPORTANTE
 ### Ver reporte de resultados
-npx playwright test show-report
+npx playwright show-report
+
+### Ver las trazas de errores si falla un test
+npx playwright show-trace test-results/trace.zip
+
 
 ## Funcionalidades
 
@@ -124,9 +131,9 @@ npx playwright test show-report
 
 ## Solución de Problemas
 
-Si encuentras errores:
+En caso de encontrar errores:
 
-1. Verificar configuración:
+1. Verificar configuración y asegurarse de que :
    - Archivo `.env` existe y tiene la clave secreta
    - Node.js y npm están actualizados
    - Todas las dependencias están instaladas
@@ -141,19 +148,31 @@ Si encuentras errores:
    - Revisar screenshots en `/test-results/`
    - Verificar videos de fallos
 
-## Notas Importantes
 
-- No compartir ni commitear el archivo `.env`
-- Mantener el Excel con el formato especificado
-- Los screenshots y videos solo se generan en fallos
-- La clave secreta debe mantenerse segura
+## Guía de Ejemplo: Hacer Fallar un Test y Ver el Reporte
 
-## Soporte
+### 1. Modificar el Test Para que Falle
+En el archivo `tests/jsonPlaceholder.spec.ts`, modifica la aserción del status code (linea 86 del codigo):
+    expect(response.status()).toBe(201);
 
-Para reportar problemas:
-1. Revisar logs y evidencias
-2. Crear un issue en el repositorio
-3. Incluir:
-   - Logs de error
-   - Screenshots si existen
-   - Pasos para reproducir
+// Original (test exitoso)
+expect(response.status()).toBe(201); // JSONPlaceholder retorna 201 para creaciones
+
+// Modificar a (test fallido)
+expect(response.status()).toBe(200); // Esto hará que el test falle
+
+### Ejecutar todas las pruebas
+npx playwright test
+
+
+### Vas a ver un mensaje de error similar al siguiente:
+Error: expect(received).toBe(expected)
+Expected: 200
+Received: 201
+
+
+### Analizar el reporte
+npx playwright show-report
+
+
+
