@@ -1,6 +1,6 @@
 import { test as base, expect } from '@playwright/test';
 import { WikipediaPage } from './pages/wikipediaPage';
-import { FileHelper } from './utils/fileHelper';
+import { FileHelper } from './utils/filehelper';
 import * as path from 'path';
 import { SecretManager } from './utils/secretManager';
 
@@ -65,7 +65,7 @@ test.describe('Pokemon Wikipedia Tests', () => {
         
         // Obtener información del artista
         const artworkInfo = await wikiPage.getArtistInfo();
-        // Agregar este formato de log
+        // Logs
         console.log('\nInformación del Artista:');
         console.log(`- Nombre: ${artworkInfo}`);
         console.log(`- Encontrado en: ${pokemonName}`);

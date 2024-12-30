@@ -58,7 +58,7 @@ export class WikipediaPage extends BasePage {
                 }
             }
 
-            return artistInfo || 'No artist information found';
+            return artistInfo || 'No se encontro informacion del artista';
         });
 
         return artworkInfo

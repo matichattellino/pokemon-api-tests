@@ -7,26 +7,32 @@ export default defineConfig({
     timeout: 10000
   },
   reporter: [
-    ['html'], // Reporte HTML
-    ['list']  // Reporte en la consola
+    ['html'],
+    ['list']
   ],
-  /* Configuración para todos los tests */
   use: {
     baseURL: 'https://pokeapi.co/api/v2',
-    actionTimeout: 0,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'retain-on-failure',
   },
-  outputDir: 'test-results/',
-  retries: 1,
-  workers: 1,
+  // Configuración de paralelización
+  workers: 2,          // Ejecutar 2 workers en paralelo
+  fullyParallel: true, // Habilitar paralelización completa
+  // Agrupar tests por tipo
   projects: [
     {
-      name: 'chromium',
-      use: {
-        browserName: 'chromium',
-      },
+      name: 'API Tests',
+      testMatch: /pokemon\.spec\.ts/
     },
+    {
+      name: 'Web Tests',
+      testMatch: /pokemon-wiki\.spec\.ts/
+    }
   ],
+  // Agregar medición de tiempo
+  reportSlowTests: {
+    max: 0,
+    threshold: 60000
+  },
 });

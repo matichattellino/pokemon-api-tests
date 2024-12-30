@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
+    "test:serial": "playwright test --workers=1",
+    "test:parallel": "playwright test --workers=2",
+    "test:compare": "node --loader ts-node/esm scripts/test-paralelos.ts",
     "test:ui": "playwright test --ui",
     "report": "playwright show-report"
   },
@@ -13,7 +16,9 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.49.1",
-    "@types/node": "^22.10.2"
+    "@types/node": "^22.10.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "crypto": "^1.0.1",

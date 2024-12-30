@@ -1,10 +1,9 @@
 import { test as base, expect } from '@playwright/test';
 import { PokemonAPIPage } from './pages/pokemonAPIPage';
 import { JsonPlaceholderAPIPage } from './pages/jsonPlaceholderAPIPage';
-import { FileHelper } from './utils/fileHelper';
+import { FileHelper } from './utils/filehelper';
 import { SecretManager } from './utils/secretManager';
 
-// Definición del fixture para la clave secreta encriptada
 type TestFixtures = {
   encryptedSecret: string;
   pokemonAPI: PokemonAPIPage;
@@ -14,7 +13,6 @@ type TestFixtures = {
 const test = base.extend<TestFixtures>({
   encryptedSecret: async ({}, use) => {
     const encryptedValue = SecretManager.getEncryptedSecret();
-    console.log('Clave secreta encriptada:', encryptedValue);
     await use(encryptedValue);
   },
   pokemonAPI: async ({ request }, use) => {
@@ -28,16 +26,22 @@ const test = base.extend<TestFixtures>({
 });
 
 // Tests
-test.describe('Pokemon API Tests', () => {
-  test('Validar datos de Pokemon por ID y nombre', async ({ pokemonAPI, encryptedSecret }) => {
+test.describe.serial('API Tests', () => {
+  // Pokemon API Test
+  test('1. Pokemon API Test', async ({ pokemonAPI, encryptedSecret }) => {
+    console.log('\n========== POKEMON API TEST ==========');
+    console.log('Clave secreta encriptada:', encryptedSecret);
+    
     const testData = await FileHelper.readExcelFile();
     
     for (const pokemon of testData) {
-      console.log(`\nProbando Pokemon API para ${pokemon.name} (ID: ${pokemon.id})`);
+      console.log(`\nProbando Pokemon: ${pokemon.name.toUpperCase()} (ID: ${pokemon.id})`);
 
       // Test usando ID
       const { response: responseById, data: dataById, responseTime: responseTimeById } 
         = await pokemonAPI.getPokemonById(pokemon.id);
+      
+      console.log(`Tiempo de respuesta (ID): ${responseTimeById}ms`);
       
       expect(responseById.status()).toBe(200);
       expect(responseTimeById).toBeLessThan(10000);
@@ -49,22 +53,22 @@ test.describe('Pokemon API Tests', () => {
       // Test usando nombre
       const { response: responseByName, responseTime: responseTimeByName } 
         = await pokemonAPI.getPokemonByName(pokemon.name);
-
-      console.log(`Tiempo de respuesta por nombre: ${responseTimeByName}ms`);
+      
+      console.log(`Tiempo de respuesta (nombre): ${responseTimeByName}ms`);
       
       expect(responseByName.status()).toBe(200);
       expect(responseTimeByName).toBeLessThan(10000);
 
-      console.log(`Test API finalizado - ${new Date().toLocaleString()}`);
+      console.log(`Test completado: ${new Date().toLocaleString()}`);
     }
+    
+    console.log('\n========== FIN POKEMON API TEST ==========\n');
   });
-});
 
-// JSONPlaceholder Tests
-test.describe('JSONPlaceholder API Tests', () => {
-  test('Crear nuevo post', async ({ jsonPlaceholderAPI, encryptedSecret }) => {
-    // Log de inicio del test
-    console.log('\nIniciando test de creación de post en JSONPlaceholder');
+  // JSONPlaceholder Test
+  test('2. JSONPlaceholder API Test', async ({ jsonPlaceholderAPI, encryptedSecret }) => {
+    console.log('\n========== JSONPLACEHOLDER API TEST ==========');
+    console.log('Clave secreta encriptada:', encryptedSecret);
     
     const postData = {
       title: 'Test post',
@@ -72,19 +76,15 @@ test.describe('JSONPlaceholder API Tests', () => {
       userId: 1
     };
     
-    // Log de los datos a enviar
-    console.log('Datos a enviar:', JSON.stringify(postData, null, 2));
+    console.log('\nCreando nuevo post:', JSON.stringify(postData, null, 2));
 
-    // Realizar la petición POST
     const { response, data: responseData, responseTime } = 
       await jsonPlaceholderAPI.createPost(postData);
 
-    // Log de la respuesta
-    console.log(`Tiempo de respuesta: ${responseTime}ms`);
-    console.log('Respuesta del servidor:', JSON.stringify(responseData, null, 2));
+    console.log(`\nTiempo de respuesta: ${responseTime}ms`);
+    console.log('Respuesta:', JSON.stringify(responseData, null, 2));
     console.log(`Status code: ${response.status()}`);
 
-    // Assertions
     expect(response.status()).toBe(201);
     expect(responseTime).toBeLessThan(10000);
     expect(responseData).toHaveProperty('id');
@@ -92,9 +92,10 @@ test.describe('JSONPlaceholder API Tests', () => {
     expect(responseData.body).toBe(postData.body);
     expect(responseData.userId).toBe(postData.userId);
 
-    // Log de finalización con más detalles
     console.log(`\nTest completado exitosamente`);
-    console.log(`ID del post creado: ${responseData.id}`);
-    console.log(`Test finalizado - ${new Date().toLocaleString()}`);
+    console.log(`Post creado con ID: ${responseData.id}`);
+    console.log(`Finalizado: ${new Date().toLocaleString()}`);
+    
+    console.log('\n========== FIN JSONPLACEHOLDER API TEST ==========\n');
   });
 });

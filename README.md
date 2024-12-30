@@ -1,7 +1,8 @@
 # Pokemon Test Automation Project
 
 ## Descripción
-Este proyecto automatiza pruebas para la PokeAPI y Wikipedia usando Playwright + TypeScript. Incluye validaciones de API, manejo de imágenes y verificación de contenido web.
+Este proyecto automatiza pruebas para la PokeAPI y Wikipedia usando Playwright + TypeScript. 
+Incluye validaciones de API, manejo de imágenes y verificación de contenido web.
 
 ## Prerrequisitos
 - Node.js (v14 o superior)
@@ -79,6 +80,49 @@ npx playwright show-report
 
 ### Ver las trazas de errores si falla un test
 npx playwright show-trace test-results/trace.zip
+
+
+Modos de Ejecución (tiene el objetivo de mostrar cuando tiempo ahorramos corriendo los test en paralelo, 
+en este caso no es tan notoria la diferencia porque los test son sencillos pero estamos cerca de un 20%)
+El proyecto soporta diferentes modos de ejecución para los tests:
+
+Ejecución Estándar:
+
+npm test
+
+Ejecución en Serie (un test a la vez):
+
+npm run test:serial
+
+Ejecución en Paralelo (múltiples tests en simultaneo):
+
+npm run test:parallel
+
+Comparación de Rendimiento:
+
+npm run test:compare
+Este comando ejecutará los tests en ambos modos (serie y paralelo) y mostrará:
+
+Tiempo de ejecución en serie
+Tiempo de ejecución en paralelo
+Tiempo ahorrado
+Porcentaje de mejora
+
+Ejemplo de Salida de Comparación:
+Copy🔍 Comparando modos de ejecución...
+
+Ejecutando tests en serie...
+[Logs de ejecución...]
+
+Ejecutando tests en paralelo...
+[Logs de ejecución...]
+
+📊 Resultados de la comparación:
+=====================================
+Tiempo en serie:    6.10s
+Tiempo en paralelo: 3.45s
+Tiempo ahorrado:    2.65s (43.44%)
+=====================================
 
 
 ## Funcionalidades
