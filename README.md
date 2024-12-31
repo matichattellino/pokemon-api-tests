@@ -12,7 +12,7 @@ Incluye validaciones de API, manejo de imágenes y verificación de contenido we
 ## Instalación
 
 1. Clonar el repositorio:
-git clone <url-del-repositorio>
+git clone https://github.com/matichattellino/pokemon-api-tests.git
 cd pokemon-api-tests
 
 2. Instalar dependencias:
